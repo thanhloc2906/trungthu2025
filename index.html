@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <title>Quà Trung Thu ✨</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <!-- Nút nhận quà -->
+  <div id="giftBtn" class="hidden">🎁 Ấn vào để nhận quà Trung Thu</div>
+
+  <!-- Nhạc nền -->
+  <audio id="bg-music" src="assets/music.mp3" autoplay loop></audio>
+
+  <!-- Canvas cho hiệu ứng -->
+  <canvas id="stars"></canvas>
+  <canvas id="fireworks"></canvas>
+
+  <!-- Cảnh chính -->
+  <div class="scene">
+    <img src="assets/trang.png" class="moon">
+    <img src="assets/cay.png" class="tree">
+    <div id="lanterns"></div>
+    <div id="leaves"></div>
+    <div id="wishes"></div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/animejs@3.2.1/lib/anime.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/fireworks-js@2/dist/fireworks.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>
