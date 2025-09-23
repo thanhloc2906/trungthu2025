@@ -42,15 +42,19 @@ tree.scale.set(4, 4, 1);
 tree.position.set(0, -1.5, 0);
 scene.add(tree);
 
-// ================== ĐÈN LỒNG BAY ==================
+// ================== ĐÈN LỒNG & CÂU CHÚC ==================
 const lanternImages = [
   "assets/denlong1.png",
   "assets/denlong2.png",
-  "assets/denlong3.png",
+  "assets/denlong3.png"
+];
+
+const blessingImages = [
   "assets/cauchuc2.jpg",
   "assets/cauchuc3.jpg"
 ];
 
+// 🎇 Đèn lồng
 function createLantern() {
   const texture = new THREE.TextureLoader().load(
     lanternImages[Math.floor(Math.random() * lanternImages.length)]
@@ -59,9 +63,8 @@ function createLantern() {
     new THREE.SpriteMaterial({ map: texture, transparent: true })
   );
 
-  // tăng size để dễ nhìn rõ câu chúc
-  const size = Math.random() * 2 + 1;
-  lantern.scale.set(size, size * 6, 1); // câu chúc dài nên scale cao hơn
+  const size = Math.random() * 1.2 + 0.8; // size nhỏ hơn câu chúc
+  lantern.scale.set(size, size, 1);
   lantern.position.set((Math.random() - 0.5) * 6, -3, 0);
 
   scene.add(lantern);
@@ -79,7 +82,51 @@ function createLantern() {
   animateLantern();
 }
 
-setInterval(createLantern, 1500);
+// 🧧 Câu chúc
+function createBlessing() {
+  const texture = new THREE.TextureLoader().load(
+    blessingImages[Math.floor(Math.random() * blessingImages.length)]
+  );
+
+  const material = new THREE.MeshBasicMaterial({ map: texture, transparent: true });
+  
+  // Giữ đúng tỷ lệ ảnh
+  texture.once('update', () => {
+    const aspect = texture.image.width / texture.image.height;
+    const height = 3; // chiều cao hiển thị cố định
+    const width = height * aspect;
+
+    const geometry = new THREE.PlaneGeometry(width, height);
+    const blessing = new THREE.Mesh(geometry, material);
+
+    blessing.position.set((Math.random() - 0.5) * 6, -3, 0);
+    scene.add(blessing);
+
+    const speed = Math.random() * 0.01 + 0.005;
+
+    function animateBlessing() {
+      blessing.position.y += speed;
+      if (blessing.position.y > 7) {
+        scene.remove(blessing);
+      } else {
+        requestAnimationFrame(animateBlessing);
+      }
+    }
+    animateBlessing();
+  });
+}
+
+// 🔀 Random đèn lồng hoặc câu chúc
+function createLanternOrBlessing() {
+  if (Math.random() < 0.5) {
+    createLantern();
+  } else {
+    createBlessing();
+  }
+}
+
+setInterval(createLanternOrBlessing, 1500);
+
 
 // ================== QUÀ POPUP & NHẠC ==================
 const giftButton = document.getElementById("gift-button");
