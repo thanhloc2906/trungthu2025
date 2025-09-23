@@ -2,31 +2,31 @@
 <html lang="vi">
 <head>
   <meta charset="UTF-8">
-  <title>Quà Trung Thu ✨</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Quà Trung Thu</title>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <!-- Nút nhận quà -->
-  <div id="giftBtn" class="hidden">🎁 Ấn vào để nhận quà Trung Thu</div>
-
   <!-- Nhạc nền -->
   <audio id="bg-music" src="assets/music.mp3" autoplay loop></audio>
 
-  <!-- Canvas cho hiệu ứng -->
-  <canvas id="stars"></canvas>
-  <canvas id="fireworks"></canvas>
-
-  <!-- Cảnh chính -->
-  <div class="scene">
-    <img src="assets/trang.png" class="moon">
-    <img src="assets/cay.png" class="tree">
-    <div id="lanterns"></div>
-    <div id="leaves"></div>
-    <div id="wishes"></div>
+  <!-- Khung cảnh chính -->
+  <div id="scene-container">
+    <img src="assets/cay2.png" id="tree" alt="Cây và đất">
   </div>
 
-  <script src="https://cdn.jsdelivr.net/npm/animejs@3.2.1/lib/anime.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/fireworks-js@2/dist/fireworks.js"></script>
+  <!-- Nút nhận quà -->
+  <button id="gift-btn">🎁 Nhận quà Trung Thu</button>
+
+  <!-- Ảnh quà -->
+  <div id="gift-popup">
+    <img src="assets/quatang.jpg" alt="Quà Trung Thu">
+  </div>
+
+  <canvas id="fireworks"></canvas>
+
+  <script src="https://cdn.jsdelivr.net/npm/three@0.152.2/build/three.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/three@0.152.2/examples/js/controls/OrbitControls.js"></script>
   <script src="script.js"></script>
 </body>
 </html>
