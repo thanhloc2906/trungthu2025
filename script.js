@@ -43,19 +43,34 @@ tree.position.set(0, -1.5, 0);
 scene.add(tree);
 
 // ================== ĐÈN LỒNG BAY ==================
-const lanternImages = ["assets/denlong1.png", "asseets/cauchuc1.jpg", "assets/cauchuc2.jpg", "assets/cauchuc3.jpg", "assets/denlong2.png", "assets/denlong3.png", "assets/2.jpg", "assets/1.jpg", "assets/3.jpg"];
+const lanternImages = [
+  "assets/denlong1.png",
+  "assets/denlong2.png",
+  "assets/denlong3.png",
+  "assets/cauchuc2.jpg",
+  "assets/cauchuc3.jpg"
+];
+
 function createLantern() {
-  const texture = new THREE.TextureLoader().load(lanternImages[Math.floor(Math.random() * lanternImages.length)]);
-  const lantern = new THREE.Sprite(new THREE.SpriteMaterial({ map: texture, transparent: true }));
-  const size = Math.random() * 0.8 + 0.5;
-  lantern.scale.set(size, size, 1);
-  lantern.position.set((Math.random() - 0.5) * 8, -3, (Math.random() - 0.5) * 5);
+  const texture = new THREE.TextureLoader().load(
+    lanternImages[Math.floor(Math.random() * lanternImages.length)]
+  );
+  const lantern = new THREE.Sprite(
+    new THREE.SpriteMaterial({ map: texture, transparent: true })
+  );
+
+  // tăng size để dễ nhìn rõ câu chúc
+  const size = Math.random() * 2 + 1;
+  lantern.scale.set(size, size * 2.5, 1); // câu chúc dài nên scale cao hơn
+  lantern.position.set((Math.random() - 0.5) * 6, -3, 0);
+
   scene.add(lantern);
 
   const speed = Math.random() * 0.01 + 0.005;
+
   function animateLantern() {
     lantern.position.y += speed;
-    if (lantern.position.y > 6) {
+    if (lantern.position.y > 7) {
       scene.remove(lantern);
     } else {
       requestAnimationFrame(animateLantern);
@@ -63,6 +78,7 @@ function createLantern() {
   }
   animateLantern();
 }
+
 setInterval(createLantern, 1500);
 
 // ================== QUÀ POPUP & NHẠC ==================
