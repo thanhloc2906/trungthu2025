@@ -99,8 +99,15 @@ closeButton.addEventListener("click", () => {
 
 // ================== PHÁT NHẠC ==================
 const music = document.getElementById("background-music");
-window.addEventListener("click", () => {
-  if (music.paused) music.play();
+
+window.addEventListener("load", () => {
+  // bỏ mute sau khi load để đánh lừa autoplay policy
+  setTimeout(() => {
+    music.muted = false;
+    music.play().catch(err => {
+      console.log("⚠️ Trình duyệt chặn autoplay:", err);
+    });
+  }, 500);
 });
 
 // ================== LOOP ==================
