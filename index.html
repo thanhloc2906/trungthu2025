@@ -1,32 +1,27 @@
 <!DOCTYPE html>
 <html lang="vi">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Quà Trung Thu</title>
-  <link rel="stylesheet" href="style.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Trung Thu 2025</title>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <!-- Nhạc nền -->
-  <audio id="bg-music" src="assets/music.mp3" autoplay loop></audio>
+    <div id="container"></div>
+    <div id="gift-button-container">
+        <button id="gift-button" style="display:none;">Nhận Quà Trung Thu</button>
+    </div>
+    <audio id="background-music" src="assets/audio/music.mp3" loop></audio>
 
-  <!-- Khung cảnh chính -->
-  <div id="scene-container">
-    <img src="assets/cay2.png" id="tree" alt="Cây và đất">
-  </div>
-
-  <!-- Nút nhận quà -->
-  <button id="gift-btn">🎁 Nhận quà Trung Thu</button>
-
-  <!-- Ảnh quà -->
-  <div id="gift-popup">
-    <img src="assets/quatang.jpg" alt="Quà Trung Thu">
-  </div>
-
-  <canvas id="fireworks"></canvas>
-
-  <script src="https://cdn.jsdelivr.net/npm/three@0.152.2/build/three.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/three@0.152.2/examples/js/controls/OrbitControls.js"></script>
-  <script src="script.js"></script>
+    <div id="gift-popup" class="popup">
+        <div class="popup-content">
+            <span class="close-button">&times;</span>
+            <img id="gift-image" src="assets/images/quatang.png" alt="Quà tặng Trung Thu">
+        </div>
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
+    
+    <script src="script.js"></script>
 </body>
 </html>
