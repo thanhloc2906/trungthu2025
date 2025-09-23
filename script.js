@@ -9,12 +9,13 @@ document.getElementById('container').appendChild(renderer.domElement);
 let controls;
 const loader = new THREE.TextureLoader();
 const objects = {};
+const lanterns = [];
 const leaves = [];
 const fireworks = [];
 
 // Thiết lập điều khiển 3D
 controls = new THREE.OrbitControls(camera, renderer.domElement);
-controls.enableDamping = true; // Cho hiệu ứng quay mượt hơn
+controls.enableDamping = true;
 controls.dampingFactor = 0.05;
 controls.screenSpacePanning = false;
 controls.minDistance = 5;
@@ -33,10 +34,11 @@ scene.add(directionalLight);
 function loadAssets() {
     const assetMap = {
         cay2: 'assets/cay2.png',
-        trang: 'assets/trang.png',
-        denlong: 'assets/denlong1.png',
+        trang: 'assets/trangl.png',
         denongsao: 'assets/denongsao.png'
     };
+
+    const lanternFiles = ['denlong1.png', 'denlong2.png', 'denlong3.png'];
 
     const promises = Object.keys(assetMap).map(key => {
         return new Promise(resolve => {
@@ -50,7 +52,22 @@ function loadAssets() {
         });
     });
 
-    Promise.all(promises).then(() => {
+    // Tải các lồng đèn riêng biệt
+    const lanternPromises = lanternFiles.map(file => {
+        return new Promise(resolve => {
+            loader.load(`assets/${file}`, texture => {
+                const material = new THREE.SpriteMaterial({ map: texture, transparent: true, alphaTest: 0.1 });
+                const lantern = new THREE.Sprite(material);
+                lantern.scale.set(3, 3, 1);
+                lantern.position.set(Math.random() * 20 - 10, Math.random() * 5, Math.random() * 20 - 10);
+                lanterns.push(lantern);
+                scene.add(lantern);
+                resolve();
+            });
+        });
+    });
+
+    Promise.all([...promises, ...lanternPromises]).then(() => {
         // Đặt đất và cây vào giữa
         objects.cay2.position.set(0, 0, 0);
         scene.add(objects.cay2);
@@ -59,21 +76,12 @@ function loadAssets() {
         objects.trang.scale.set(8, 8, 1);
         objects.trang.position.set(-15, 15, -20);
         scene.add(objects.trang);
-
-        // Tạo nhiều đèn lồng
-        for (let i = 0; i < 5; i++) {
-            const lantern = objects.denlong.clone();
-            lantern.scale.set(3, 3, 1);
-            lantern.position.set(Math.random() * 20 - 10, Math.random() * 5, Math.random() * 20 - 10);
-            lantern.initialY = lantern.position.y;
-            scene.add(lantern);
-        }
     });
 }
 
-// Tạo hiệu ứng lá vàng rơi
+// Tạo hiệu ứng lá vàng rơi (dùng ảnh đèn ông sao làm lá)
 function createLeaf() {
-    loader.load('assets/denongsao.png', texture => { // Dùng tạm ảnh denongsao cho lá
+    loader.load('assets/denongsao.png', texture => {
         const material = new THREE.SpriteMaterial({ map: texture, transparent: true, alphaTest: 0.1 });
         const leaf = new THREE.Sprite(material);
         leaf.scale.set(0.5, 0.5, 1);
@@ -113,23 +121,21 @@ function animate() {
     controls.update();
 
     // Cập nhật vị trí đèn lồng bay lên
-    scene.children.forEach(child => {
-        if (child.material && child.material.map && child.material.map.image.src.includes('denlong')) {
-            child.position.y += 0.01;
-            // Reset đèn lồng khi bay quá cao
-            if (child.position.y > 20) {
-                child.position.y = child.initialY;
-            }
+    lanterns.forEach(lantern => {
+        lantern.position.y += 0.01;
+        if (lantern.position.y > 20) {
+            lantern.position.y = -10; // Đặt lại vị trí ban đầu
+            lantern.position.x = Math.random() * 20 - 10;
+            lantern.position.z = Math.random() * 20 - 10;
         }
     });
 
     // Cập nhật hiệu ứng lá rơi
-    leaves.forEach(leaf => {
+    leaves.forEach((leaf, index) => {
         leaf.position.add(leaf.velocity);
         if (leaf.position.y < -5) {
-            leaf.position.y = 5;
-            leaf.position.x = Math.random() * 5 - 2.5;
-            leaf.position.z = Math.random() * 5 - 2.5;
+            scene.remove(leaf);
+            leaves.splice(index, 1);
         }
     });
 
@@ -161,7 +167,6 @@ window.addEventListener('load', () => {
     const music = document.getElementById('background-music');
     music.play().catch(error => {
         console.log("Tự động phát nhạc bị chặn:", error);
-        // Yêu cầu người dùng tương tác để phát nhạc
         document.body.addEventListener('click', () => music.play(), { once: true });
     });
 });
@@ -184,6 +189,6 @@ document.querySelector('.close-button').addEventListener('click', () => {
 
 // Chạy các hàm
 loadAssets();
-setInterval(createLeaf, 1000); // Tạo lá rơi mỗi 1 giây
-setInterval(createFireworks, 2500); // Tạo pháo hoa mỗi 2.5 giây
+setInterval(createLeaf, 1000);
+setInterval(createFireworks, 2500);
 animate();
