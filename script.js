@@ -72,40 +72,44 @@ function createLantern() {
 // ================== CÂU CHÚC ==================
 const blessingImages = [
   "assets/cauchuc2.jpg",
-  "assets/cauchuc3.jpg",
-  "assets/cauchuc1.jpg"
+  "assets/cauchuc3.jpg"
 ];
 
 function createBlessing() {
   const texture = new THREE.TextureLoader().load(
-    blessingImages[Math.floor(Math.random() * blessingImages.length)]
-  );
+    blessingImages[Math.floor(Math.random() * blessingImages.length)],
+    (tex) => {
+      // chạy khi load xong ảnh
+      const aspect = tex.image.width / tex.image.height;
 
-  const material = new THREE.MeshBasicMaterial({ map: texture, transparent: true });
+      const height = 16;               // chiều cao cố định 16
+      const width = height * aspect;   // chiều rộng theo tỉ lệ
 
-  texture.once('update', () => {
-    const aspect = texture.image.width / texture.image.height;
-    const height = 16; // cao cố định
-    const width = height * aspect;
+      const geometry = new THREE.PlaneGeometry(width, height);
+      const material = new THREE.MeshBasicMaterial({
+        map: tex,
+        transparent: true,
+      });
 
-    const geometry = new THREE.PlaneGeometry(width, height);
-    const blessing = new THREE.Mesh(geometry, material);
+      const blessing = new THREE.Mesh(geometry, material);
+      blessing.position.set((Math.random() - 0.5) * 20, -10, 0);
+      scene.add(blessing);
 
-    blessing.position.set((Math.random() - 0.5) * 6, -3, 0);
-    scene.add(blessing);
+      const speed = Math.random() * 0.03 + 0.01;
 
-    const speed = Math.random() * 0.01 + 0.005;
-
-    function animateBlessing() {
-      blessing.position.y += speed;
-      if (blessing.position.y > 7) {
-        scene.remove(blessing);
-      } else {
-        requestAnimationFrame(animateBlessing);
+      function animateBlessing() {
+        blessing.position.y += speed;
+        if (blessing.position.y > 20) {
+          scene.remove(blessing);
+          geometry.dispose();
+          material.dispose();
+        } else {
+          requestAnimationFrame(animateBlessing);
+        }
       }
+      animateBlessing();
     }
-    animateBlessing();
-  });
+  );
 }
 
 // ================== CHẠY THỬ ==================
