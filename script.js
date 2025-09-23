@@ -61,7 +61,7 @@ function createLantern() {
 
   // tăng size để dễ nhìn rõ câu chúc
   const size = Math.random() * 2 + 1;
-  lantern.scale.set(size, size * 2.5, 1); // câu chúc dài nên scale cao hơn
+  lantern.scale.set(size, size * 6, 1); // câu chúc dài nên scale cao hơn
   lantern.position.set((Math.random() - 0.5) * 6, -3, 0);
 
   scene.add(lantern);
