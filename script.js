@@ -43,7 +43,7 @@ tree.position.set(0, -1.5, 0);
 scene.add(tree);
 
 // ================== ĐÈN LỒNG BAY ==================
-const lanternImages = ["assets/denlong1.png", "assets/denlong2.png", "assets/denlong3.png", "assets/2.png", "assets/1.png","assets/3.png",];
+const lanternImages = ["assets/denlong1.png", "assets/denlong2.png", "assets/denlong3.png", "assets/2.jpg", "assets/1.jpg","assets/3.jpg",];
 function createLantern() {
   const texture = new THREE.TextureLoader().load(lanternImages[Math.floor(Math.random() * lanternImages.length)]);
   const lantern = new THREE.Sprite(new THREE.SpriteMaterial({ map: texture, transparent: true }));
