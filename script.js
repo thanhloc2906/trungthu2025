@@ -34,7 +34,7 @@ scene.add(directionalLight);
 function loadAssets() {
     const assetMap = {
         cay2: 'assets/cay2.png',
-        trang: 'assets/trangl.png',
+        trang: 'assets/trang.png',
         denongsao: 'assets/denongsao.png'
     };
 
