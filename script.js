@@ -117,7 +117,7 @@ function createFirework() {
   geometry.setAttribute("color", new THREE.Float32BufferAttribute(colors, 3));
 
   const material = new THREE.PointsMaterial({
-    size: 0.15,
+    size: 0.1,
     vertexColors: true,
     transparent: true,
     opacity: 1
