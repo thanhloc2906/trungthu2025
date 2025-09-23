@@ -85,7 +85,7 @@ function createBlessing() {
 
   texture.once('update', () => {
     const aspect = texture.image.width / texture.image.height;
-    const height = 9; // cao cố định
+    const height = 16; // cao cố định
     const width = height * aspect;
 
     const geometry = new THREE.PlaneGeometry(width, height);
