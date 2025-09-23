@@ -32,10 +32,10 @@ scene.add(directionalLight);
 // Load và thêm các đối tượng vào scene
 function loadAssets() {
     const assetMap = {
-        cay2: 'assets/images/cay2.png',
-        trang: 'assets/images/trang.png',
-        denlong: 'assets/images/denlong1.png',
-        denongsao: 'assets/images/denongsao.png'
+        cay2: 'assets/cay2.png',
+        trang: 'assets/trang.png',
+        denlong: 'assets/denlong1.png',
+        denongsao: 'assets/denongsao.png'
     };
 
     const promises = Object.keys(assetMap).map(key => {
@@ -73,7 +73,7 @@ function loadAssets() {
 
 // Tạo hiệu ứng lá vàng rơi
 function createLeaf() {
-    loader.load('assets/images/denongsao.png', texture => { // Dùng tạm ảnh denongsao cho lá
+    loader.load('assets/denongsao.png', texture => { // Dùng tạm ảnh denongsao cho lá
         const material = new THREE.SpriteMaterial({ map: texture, transparent: true, alphaTest: 0.1 });
         const leaf = new THREE.Sprite(material);
         leaf.scale.set(0.5, 0.5, 1);
