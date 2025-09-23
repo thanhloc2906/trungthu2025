@@ -34,7 +34,7 @@ function loadAssets() {
     const assetMap = {
         cay2: 'assets/images/cay2.png',
         trang: 'assets/images/trang.png',
-        denlong: 'assets/images/denlong.png',
+        denlong: 'assets/images/denlong1.png',
         denongsao: 'assets/images/denongsao.png'
     };
 
