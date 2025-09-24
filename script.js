@@ -1,6 +1,6 @@
 // ================== SCENE SETUP ==================
 const scene = new THREE.Scene();
-scene.background = new THREE.Color(0x000000); // nền đen vũ trụ
+scene.background = new THREE.Color(0x000000);
 
 const camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.1, 1000);
 camera.position.set(0, 1, 6);
@@ -35,6 +35,13 @@ moon.scale.set(3, 3, 1);
 moon.position.set(-4, 4, -5);
 scene.add(moon);
 
+// ================== CÂY ==================
+const treeTexture = new THREE.TextureLoader().load("assets/cay2.png");
+const tree = new THREE.Sprite(new THREE.SpriteMaterial({ map: treeTexture, transparent: true }));
+tree.scale.set(6, 6, 1);
+tree.position.set(0, -3.5, -4); // đặt dưới cùng
+scene.add(tree);
+
 // ================== ĐÈN LỒNG ==================
 const lanternImages = [
   "assets/denlong1.png",
@@ -46,13 +53,13 @@ function createLantern() {
   const texture = new THREE.TextureLoader().load(
     lanternImages[Math.floor(Math.random() * lanternImages.length)]
   );
-  const lantern = new THREE.Sprite(
-    new THREE.SpriteMaterial({ map: texture, transparent: true })
-  );
+  const lantern = new THREE.Sprite(new THREE.SpriteMaterial({ map: texture, transparent: true }));
 
   const size = Math.random() * 1.2 + 0.8;
   lantern.scale.set(size, size, 1);
-  lantern.position.set((Math.random() - 0.5) * 6, -3, 0);
+
+  // so le theo X và Y
+  lantern.position.set((Math.random() - 0.5) * 8, -3 + Math.random() * 2, 0);
 
   scene.add(lantern);
 
@@ -72,8 +79,7 @@ function createLantern() {
 // ================== CÂU CHÚC ==================
 const blessingImages = [
   "assets/cauchuc2.jpg",
-  "assets/cauchuc3.jpg",
-  "assets/cauchuc1.jpg"
+  "assets/cauchuc3.jpg"
 ];
 
 function createBlessing() {
@@ -82,8 +88,8 @@ function createBlessing() {
     (tex) => {
       const aspect = tex.image.width / tex.image.height;
 
-      const height = 2;               // cao bằng đèn lồng
-      const width = height * aspect;  // giữ đúng tỉ lệ chữ nhật
+      const height = 2;
+      const width = height * aspect;
 
       const geometry = new THREE.PlaneGeometry(width, height);
       const material = new THREE.MeshBasicMaterial({
@@ -92,7 +98,9 @@ function createBlessing() {
       });
 
       const blessing = new THREE.Mesh(geometry, material);
-      blessing.position.set((Math.random() - 0.5) * 12, -6, 0);
+
+      // so le theo X và Y
+      blessing.position.set((Math.random() - 0.5) * 10, -6 + Math.random() * 2, 0);
       scene.add(blessing);
 
       const speed = Math.random() * 0.015 + 0.01;
@@ -118,13 +126,12 @@ const giftPopup = document.getElementById("gift-popup");
 const closeButton = document.querySelector(".close-button");
 const music = document.getElementById("background-music");
 
-// 🎶 Phát nhạc ngay khi load web
 window.addEventListener("load", () => {
   music.muted = true;
   music.play().then(() => {
     setTimeout(() => (music.muted = false), 300);
   }).catch(err => {
-    console.log("⚠️ Autoplay bị chặn, phát khi click:", err);
+    console.log("⚠️ Autoplay bị chặn:", err);
     window.addEventListener("click", () => {
       if (music.paused) music.play();
     }, { once: true });
@@ -146,14 +153,14 @@ closeButton.addEventListener("click", () => {
 // ================== PHÁO HOA ==================
 function createFirework() {
   const geometry = new THREE.BufferGeometry();
-  const count = 200; // ít hạt hơn
+  const count = 200;
   const positions = [];
   const colors = [];
 
   for (let i = 0; i < count; i++) {
     const theta = Math.random() * 2 * Math.PI;
     const phi = Math.random() * Math.PI;
-    const r = Math.random() * 2.5; // bán kính nhỏ
+    const r = Math.random() * 2.5;
 
     positions.push(
       r * Math.sin(phi) * Math.cos(theta),
@@ -188,15 +195,14 @@ function createFirework() {
   animateFirework();
 }
 
-// nổ liên tục mỗi 0.4s
 setInterval(() => {
   createFirework();
   createFirework();
 }, 400);
 
 // ================== CHẠY THỬ ==================
-setInterval(createLantern, 2000);   // tạo đèn lồng liên tục
-setInterval(createBlessing, 4000);  // tạo câu chúc liên tục
+setInterval(createLantern, 2000);
+setInterval(createBlessing, 4000);
 
 // ================== LOOP ==================
 function animate() {
@@ -206,7 +212,6 @@ function animate() {
 }
 animate();
 
-// Responsive
 window.addEventListener("resize", () => {
   camera.aspect = window.innerWidth / window.innerHeight;
   camera.updateProjectionMatrix();
