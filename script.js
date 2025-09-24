@@ -1,6 +1,6 @@
 // ================== SCENE SETUP ==================
 const scene = new THREE.Scene();
-scene.background = new THREE.Color(0x000000); // nền đen vũ trụ
+scene.background = new THREE.Color(0x000000); // nền đen
 
 const camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.1, 1000);
 camera.position.set(0, 1, 6);
@@ -39,7 +39,8 @@ scene.add(moon);
 const lanternImages = [
   "assets/denlong1.png",
   "assets/denlong2.png",
-  "assets/denlong3.png"
+  "assets/denlong3.png",
+  "assets/denongsao.png"
 ];
 
 function createLantern() {
@@ -72,50 +73,40 @@ function createLantern() {
 // ================== CÂU CHÚC ==================
 const blessingImages = [
   "assets/cauchuc2.jpg",
-  "assets/cauchuc3.jpg"
+  "assets/cauchuc3.jpg",
+  "assets/cauchuc1.jpg"
 ];
 
 function createBlessing() {
-  const texture = new THREE.TextureLoader().load(
-    blessingImages[Math.floor(Math.random() * blessingImages.length)],
-    (tex) => {
-      // chạy khi load xong ảnh
-      const aspect = tex.image.width / tex.image.height;
+  const loader = new THREE.TextureLoader();
+  loader.load(blessingImages[Math.floor(Math.random() * blessingImages.length)], (tex) => {
+    // Không scale theo tỉ lệ → giữ đúng hình chữ nhật gốc
+    const geometry = new THREE.PlaneGeometry(8, 16); // tỉ lệ dọc (hình chữ nhật giống ảnh)
+    const material = new THREE.MeshBasicMaterial({
+      map: tex,
+      side: THREE.DoubleSide
+    });
 
-      const height = 16;               // chiều cao cố định 16
-      const width = height * aspect;   // chiều rộng theo tỉ lệ
+    const blessing = new THREE.Mesh(geometry, material);
+    blessing.position.set((Math.random() - 0.5) * 20, -10, 0);
+    scene.add(blessing);
 
-      const geometry = new THREE.PlaneGeometry(width, height);
-      const material = new THREE.MeshBasicMaterial({
-        map: tex,
-        transparent: true,
-      });
+    const speed = Math.random() * 0.03 + 0.01;
 
-      const blessing = new THREE.Mesh(geometry, material);
-      blessing.position.set((Math.random() - 0.5) * 20, -10, 0);
-      scene.add(blessing);
-
-      const speed = Math.random() * 0.03 + 0.01;
-
-      function animateBlessing() {
-        blessing.position.y += speed;
-        if (blessing.position.y > 20) {
-          scene.remove(blessing);
-          geometry.dispose();
-          material.dispose();
-        } else {
-          requestAnimationFrame(animateBlessing);
-        }
+    function animateBlessing() {
+      blessing.position.y += speed;
+      blessing.rotation.z = Math.sin(Date.now() * 0.001) * 0.05;
+      if (blessing.position.y > 20) {
+        scene.remove(blessing);
+        geometry.dispose();
+        material.dispose();
+      } else {
+        requestAnimationFrame(animateBlessing);
       }
-      animateBlessing();
     }
-  );
+    animateBlessing();
+  });
 }
-
-// ================== CHẠY THỬ ==================
-setInterval(createLantern, 2000);   // tạo đèn lồng liên tục
-setInterval(createBlessing, 4000);  // tạo câu chúc liên tục
-
 
 // ================== QUÀ POPUP & NHẠC ==================
 const giftButton = document.getElementById("gift-button");
@@ -125,10 +116,10 @@ const music = document.getElementById("background-music");
 
 // 🎶 Phát nhạc ngay khi load web
 window.addEventListener("load", () => {
-  music.muted = true;
-  music.play().then(() => {
-    setTimeout(() => (music.muted = false), 500); // bỏ mute sau 0.5s
-  }).catch(err => console.log("⚠️ Autoplay bị chặn:", err));
+  music.play().catch(err => {
+    console.log("⚠️ Autoplay bị chặn, sẽ thử bật lại khi người dùng click");
+    window.addEventListener("click", () => music.play(), { once: true });
+  });
 });
 
 setTimeout(() => {
@@ -146,14 +137,14 @@ closeButton.addEventListener("click", () => {
 // ================== PHÁO HOA ==================
 function createFirework() {
   const geometry = new THREE.BufferGeometry();
-  const count = 300; // số hạt nhiều hơn
+  const count = 200; // số hạt
   const positions = [];
   const colors = [];
 
   for (let i = 0; i < count; i++) {
     const theta = Math.random() * 2 * Math.PI;
     const phi = Math.random() * Math.PI;
-    const r = Math.random() * 4; // bán kính nổ to hơn
+    const r = Math.random() * 4;
 
     positions.push(
       r * Math.sin(phi) * Math.cos(theta),
@@ -161,15 +152,14 @@ function createFirework() {
       r * Math.cos(phi)
     );
 
-    // màu sáng chói hơn
-    colors.push(Math.random() * 1, Math.random() * 1, Math.random() * 1);
+    colors.push(Math.random(), Math.random(), Math.random());
   }
 
   geometry.setAttribute("position", new THREE.Float32BufferAttribute(positions, 3));
   geometry.setAttribute("color", new THREE.Float32BufferAttribute(colors, 3));
 
   const material = new THREE.PointsMaterial({
-    size: 0.1,
+    size: 0.05, // 🔹 hạt nhỏ lại
     vertexColors: true,
     transparent: true,
     opacity: 1
@@ -181,7 +171,7 @@ function createFirework() {
 
   let opacity = 1;
   function animateFirework() {
-    opacity -= 0.015; // mờ nhanh hơn
+    opacity -= 0.02;
     material.opacity = opacity;
     if (opacity <= 0) scene.remove(firework);
     else requestAnimationFrame(animateFirework);
@@ -189,11 +179,11 @@ function createFirework() {
   animateFirework();
 }
 
-// bắn nhiều pháo hoa liên tục
+// bắn pháo hoa liên tục
 setInterval(() => {
   createFirework();
   createFirework();
-}, 800); // nhanh hơn, nhiều hơn
+}, 400); // nhanh hơn
 
 // ================== LOOP ==================
 function animate() {
@@ -209,3 +199,7 @@ window.addEventListener("resize", () => {
   camera.updateProjectionMatrix();
   renderer.setSize(window.innerWidth, window.innerHeight);
 });
+
+// ================== LẶP ==================
+setInterval(createLantern, 2000);
+setInterval(createBlessing, 5000);
