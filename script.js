@@ -46,7 +46,8 @@ scene.add(tree);
 const lanternImages = [
   "assets/denlong1.png",
   "assets/denlong2.png",
-  "assets/denlong3.png"
+  "assets/denlong3.png",
+  "assets/denongsao.png"
 ];
 
 function createLantern() {
@@ -79,7 +80,8 @@ function createLantern() {
 // ================== CÂU CHÚC ==================
 const blessingImages = [
   "assets/cauchuc2.jpg",
-  "assets/cauchuc3.jpg"
+  "assets/cauchuc3.jpg",
+  "assets/cauchuc1.jpg"
 ];
 
 function createBlessing() {
@@ -175,7 +177,7 @@ function createFirework() {
   geometry.setAttribute("color", new THREE.Float32BufferAttribute(colors, 3));
 
   const material = new THREE.PointsMaterial({
-    size: 0.07,
+    size: 0.04,
     vertexColors: true,
     transparent: true,
     opacity: 1
