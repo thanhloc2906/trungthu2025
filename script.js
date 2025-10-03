@@ -142,7 +142,7 @@ window.addEventListener("load", () => {
 
 setTimeout(() => {
   giftButton.style.display = "block";
-}, 9000);
+}, 19000);
 
 giftButton.addEventListener("click", () => {
   giftPopup.style.display = "flex";
